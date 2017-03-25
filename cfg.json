@@ -2,7 +2,6 @@
 	"access_key": "aufcTQazrAr-o3B3zqf_97rG-7C2Ca4Czsaz1f16",
 	"secret_key": "",
 	"bucket_to": "logs",
-	"prefix": "v2/www.qiniu.com",
 	"domains": "www.qiniu.com",
 	"from": "-w1",
 	"to": ""
