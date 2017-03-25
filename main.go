@@ -18,7 +18,6 @@ import(
 	"access_key": "<access_key>",
 	"secret_key": "<secret_key>",
 	"bucket_to": "<bucket_name>",
-	"prefix": "<filename_prefix_to_be_sync>",
 	"domains": "<domains>",
 	"from": "",  // date 2017-01-11  or -d<days_ago> or -w<weeks_ago>
 	"to": ""  // date 2017-03-20   or -d<days_ago> or -w<weeks_ago> or null express today
@@ -153,9 +152,8 @@ type Config struct {
 	AccessKey string `json:"access_key"`
 	SecretKey string `json:"secret_key"`
 	BucketTo string `json:"bucket_to"`
-	Prefix string `json:"prefix"`
-	From string `json:"from"`
 	Domains string `json:"domains"`
+	From string `json:"from"`
 	To string `json:"to"`
 }
 
