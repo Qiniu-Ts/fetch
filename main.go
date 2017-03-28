@@ -73,7 +73,8 @@ func (c *Client) SyncLogs()  {
 			continue
 		}
 
-		err = c.Bucket(c.BucketTo).Fetch(nil, i.Name, i.Url)
+		key := strings.Split(i.Name, "/")[1]
+		err = c.Bucket(c.BucketTo).Fetch(nil, key, i.Url)
 		if err != nil {
 			log.Println("Fetch Failed", err)
 			continue
@@ -109,7 +110,11 @@ func (c *Client)ListLogs() (entries []cdn.LogEntry, err error) {
 
 func (c *Client)Days() []string  {
 
-	tf := dateParse(c.From)
+    tf := time.Now()
+    if c.From != "" {
+        tf = dateParse(c.From)
+    }
+
 	tt := time.Now()
 	if c.To != "" {
 		tt = dateParse(c.To)
