@@ -1,17 +1,15 @@
 package main
 
-
-import(
-	"log"
-	"encoding/json"
-	"os"
+import (
 	"cdn"
+	"encoding/json"
+	"log"
+	"os"
 	"qiniupkg.com/api.v7/kodo"
-	"time"
-	"strings"
 	"strconv"
+	"strings"
+	"time"
 )
-
 
 /*
 {
@@ -22,7 +20,7 @@ import(
 	"from": "",  // date 2017-01-11  or -d<days_ago> or -w<weeks_ago>
 	"to": ""  // date 2017-03-20   or -d<days_ago> or -w<weeks_ago> or null express today
 }
- */
+*/
 
 func main() {
 
@@ -49,15 +47,15 @@ type Client struct {
 	Config
 }
 
-func NewClient(cfg Config) *Client  {
-	cli :=  &Client{Config: cfg}
+func NewClient(cfg Config) *Client {
+	cli := &Client{Config: cfg}
 
 	kodo.SetMac(cfg.AccessKey, cfg.SecretKey)
 	cli.Client = kodo.NewWithoutZone(nil)
-	return  cli
+	return cli
 }
 
-func (c *Client) SyncLogs()  {
+func (c *Client) SyncLogs() {
 
 	logs, err := c.ListLogs()
 	if err != nil {
@@ -86,10 +84,9 @@ func (c *Client) SyncLogs()  {
 	log.Println("Done...")
 }
 
-func (c *Client)ListLogs() (entries []cdn.LogEntry, err error) {
+func (c *Client) ListLogs() (entries []cdn.LogEntry, err error) {
 
 	cdnCli := cdn.NewClient(c.AccessKey, c.SecretKey)
-
 
 	for _, day := range c.Days() {
 
@@ -108,12 +105,12 @@ func (c *Client)ListLogs() (entries []cdn.LogEntry, err error) {
 	return
 }
 
-func (c *Client)Days() []string  {
+func (c *Client) Days() []string {
 
-    tf := time.Now()
-    if c.From != "" {
-        tf = dateParse(c.From)
-    }
+	tf := time.Now()
+	if c.From != "" {
+		tf = dateParse(c.From)
+	}
 
 	tt := time.Now()
 	if c.To != "" {
@@ -129,37 +126,37 @@ func (c *Client)Days() []string  {
 	return days
 }
 
-func dateParse(d string) time.Time  {
+func dateParse(d string) time.Time {
 
 	if strings.HasPrefix(d, "-d") {
 		days, _ := strconv.Atoi("-" + d[2:])
-		return time.Now().AddDate(0,0, days)
+		return time.Now().AddDate(0, 0, days)
 	}
 
 	if strings.HasPrefix(d, "-w") {
 		weeks, _ := strconv.Atoi("-" + d[2:])
-		return time.Now().AddDate(0,0, weeks*7)
+		return time.Now().AddDate(0, 0, weeks*7)
 	}
 
 	t, _ := time.Parse("2006-01-02", d)
 
-	return  t
+	return t
 }
 func (c *Client) needFetch(le cdn.LogEntry) bool {
 
 	b := c.Bucket(c.BucketTo)
 	stat, _ := b.Stat(nil, le.Name)
-	return  le.Size != stat.Fsize
+	return le.Size != stat.Fsize
 
 }
 
 type Config struct {
 	AccessKey string `json:"access_key"`
 	SecretKey string `json:"secret_key"`
-	BucketTo string `json:"bucket_to"`
-	Domains string `json:"domains"`
-	From string `json:"from"`
-	To string `json:"to"`
+	BucketTo  string `json:"bucket_to"`
+	Domains   string `json:"domains"`
+	From      string `json:"from"`
+	To        string `json:"to"`
 }
 
 func LoadConfig(fname string, cfg *Config) error {
@@ -169,5 +166,5 @@ func LoadConfig(fname string, cfg *Config) error {
 	}
 
 	jparser := json.NewDecoder(fh)
-	return  jparser.Decode(&cfg)
+	return jparser.Decode(&cfg)
 }

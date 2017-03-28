@@ -9,7 +9,7 @@ type Client struct {
 	rpc.Client
 }
 
-func NewClient(ak, sk string) *Client  {
+func NewClient(ak, sk string) *Client {
 	mac := &qbox.Mac{ak, []byte(sk)}
 
 	cli := rpc.Client{qbox.NewClient(mac, nil)}
@@ -22,14 +22,13 @@ type ListRet struct {
 }
 
 type LogEntry struct {
-	Name string `json:"name"`
-	Size int64 `json:"size"`
-	Mtime int `json:"mtime"`
-	Url string `json:"url"`
+	Name  string `json:"name"`
+	Size  int64  `json:"size"`
+	Mtime int    `json:"mtime"`
+	Url   string `json:"url"`
 }
 
-
-func (c *Client) List(day, domains string) (list map[string][]LogEntry, err error)  {
+func (c *Client) List(day, domains string) (list map[string][]LogEntry, err error) {
 	u := "http://fusion.qiniuapi.com/v2/tune/log/list"
 
 	params := map[string]interface{}{"day": day, "domains": domains}
